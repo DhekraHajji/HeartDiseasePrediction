@@ -1,0 +1,70 @@
+import pandas as pd
+
+# Provide the path to the dataset
+dataset_path = r'C:\Users\Dhekra Hajji\Downloads\heart.csv'
+
+# Read the dataset into a DataFrame
+df = pd.read_csv(dataset_path)
+
+# View the first few rows of the DataFrame
+df.head()
+# Count the number of patients with and without heart disease
+total_patients = len(df)
+patients_with_heart_disease = len(df[df['target'] == 1])
+patients_without_heart_disease = len(df[df['target'] == 0])
+
+# Calculate the percentages
+percentage_with_heart_disease = (patients_with_heart_disease / total_patients) * 100
+percentage_without_heart_disease = (patients_without_heart_disease / total_patients) * 100
+
+# Print the results
+print(f"Percentage of Patients Haven't Heart Disease: {percentage_without_heart_disease:.2f}%")
+print(f"Percentage of Patients Have Heart Disease: {percentage_with_heart_disease:.2f}%")
+# Count the number of female and male patients
+total_patients = len(df)
+female_patients = len(df[df['sex'] == 0])
+male_patients = len(df[df['sex'] == 1])
+
+# Calculate the percentages
+percentage_female_patients = (female_patients / total_patients) * 100
+percentage_male_patients = (male_patients / total_patients) * 100
+
+# Print the results
+print(f"Percentage of Female Patients: {percentage_female_patients:.2f}%")
+print(f"Percentage of Male Patients: {percentage_male_patients:.2f}%")
+import matplotlib.pyplot as plt
+
+# Group the data by sex and target (heart disease presence)
+gender_heart_disease = df.groupby(['sex', 'target']).size().unstack()
+
+# Calculate the percentages
+total_female_patients = gender_heart_disease.loc[0].sum()
+total_male_patients = gender_heart_disease.loc[1].sum()
+
+female_heart_disease_percentage = (gender_heart_disease.loc[0, 1] / total_female_patients) * 100
+male_heart_disease_percentage = (gender_heart_disease.loc[1, 1] / total_male_patients) * 100
+
+# Create a bar plot
+plt.figure(figsize=(8, 6))
+plt.bar(['Female', 'Male'], [female_heart_disease_percentage, male_heart_disease_percentage], color=['pink', 'blue'])
+plt.xlabel('Gender')
+plt.ylabel('Percentage of Patients with Heart Disease')
+plt.title('Heart Disease Occurrence by Gender')
+plt.ylim(0, 100)
+plt.show()
+
+# Create a scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(df['age'], df['thalach'], c=df['target'], cmap='coolwarm', alpha=0.7)
+plt.xlabel('Age')
+plt.ylabel('Maximum Heart Rate (thalach)')
+plt.title('Maximum Heart Rate vs Age')
+plt.colorbar(label='Heart Disease')
+plt.show()
+# Create a histogram
+plt.figure(figsize=(10, 6))
+plt.hist(df['age'], bins=20, color='blue', edgecolor='black', alpha=0.7)
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.title('Age Frequency Distribution')
+plt.show()
